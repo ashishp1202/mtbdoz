@@ -1,0 +1,9 @@
+[01-Mar-2017 20:47:31 America/Chicago] PHP Fatal error:  Call to undefined function get_header() in /home1/ridetour4u/public_html/wp-includes/theme-compat/embed.php on line 13
+[01-Mar-2017 20:47:58 America/Chicago] PHP Fatal error:  Call to undefined function _deprecated_file() in /home1/ridetour4u/public_html/wp-includes/theme-compat/header.php on line 10
+[01-Mar-2017 20:48:52 America/Chicago] PHP Fatal error:  Call to undefined function _deprecated_file() in /home1/ridetour4u/public_html/wp-includes/theme-compat/footer.php on line 10
+[01-Mar-2017 20:51:07 America/Chicago] PHP Fatal error:  Call to undefined function _deprecated_file() in /home1/ridetour4u/public_html/wp-includes/theme-compat/sidebar.php on line 10
+[01-Mar-2017 20:52:55 America/Chicago] PHP Fatal error:  Call to undefined function _deprecated_file() in /home1/ridetour4u/public_html/wp-includes/theme-compat/comments.php on line 10
+[01-Mar-2017 20:56:31 America/Chicago] PHP Fatal error:  Call to undefined function _e() in /home1/ridetour4u/public_html/wp-includes/theme-compat/embed-404.php on line 14
+[01-Mar-2017 20:57:52 America/Chicago] PHP Fatal error:  Call to undefined function language_attributes() in /home1/ridetour4u/public_html/wp-includes/theme-compat/header-embed.php on line 19
+[01-Mar-2017 20:58:46 America/Chicago] PHP Fatal error:  Call to undefined function do_action() in /home1/ridetour4u/public_html/wp-includes/theme-compat/footer-embed.php on line 18
+[01-Mar-2017 21:03:43 America/Chicago] PHP Fatal error:  Call to undefined function post_class() in /home1/ridetour4u/public_html/wp-includes/theme-compat/embed-content.php on line 13

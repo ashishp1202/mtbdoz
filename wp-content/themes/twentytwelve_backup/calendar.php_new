@@ -1,0 +1,271 @@
+<?php
+/**
+ * Template Name: Calendar
+ * The template for displaying all pages
+ *
+ * This is the template that displays all pages by default.
+ * Please note that this is the WordPress construct of pages
+ * and that other 'pages' on your WordPress site will use a
+ * different template.
+ *
+ * @package WordPress
+ * @subpackage Twenty_Twelve
+ * @since Twenty Twelve 1.0
+ */
+
+get_header(header2); ?>
+<div id="primary" class="site-content">
+	<div id="content" role="main">
+		  <section id="contact-page" class="container-fluid" style="padding: 0px;">
+        <div class="row">
+            <div class="col-sm-1" style="background: rgb(233, 233, 233) none repeat scroll 0% 0%; height: 700px; padding: 0 0 0 15px">
+				<ul class="left-ul" style="list-style: outside none none; padding: 0px;">
+                    
+                    <li style="border-left: 5px solid rgb(100, 163, 196);"><a href="<?php echo site_url();?>/information"><img src="<?php bloginfo( 'template_url' ); ?>/img/stting-info.png"></a></li>
+                    <li style="border-left: 6px solid rgb(255, 117, 117);"><a href="<?php echo site_url();?>/tour-list-info"><img src="<?php bloginfo( 'template_url' ); ?>/img/setting-icon.png"></a></li>
+                    <li style="border-left: 6px solid rgb(187, 226, 104); background: rgb(187, 226, 104) none repeat scroll 0% 0%;"><a href="<?php echo site_url(); ?>/schedule-tours/"><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-icon.png"></a></li>
+                </ul>
+			</div>
+            <!--div class="col-sm-6">
+				<div class="col-sm-12">
+					<h1>SCHEDULE TOURS</h1>
+					<div class="form-group">
+						<select class="select-class">
+						  <option value="volvo">2 Days Upstate. Ny</option>
+						  <option value="saab">Saab</option>
+						  <option value="opel">Opel</option>
+						  <option value="audi">Audi</option>
+						</select>
+					</div>
+					
+					<div style="width: 100%; float: left;">
+						<div class="date">
+							<h4>M</h4>
+						</div>
+						<div class="date">
+							<h4>T</h4>
+						</div>
+						<div class="date">
+							<h4>W</h4>
+						</div>
+						<div class="date">
+							<h4>T</h4>
+						</div>
+						<div class="date">
+							<h4>F</h4>
+						</div>
+						<div class="date">
+							<h4>S</h4>
+						</div>
+						<div class="date">
+							<h4>S</h4>
+						</div>
+							
+					
+					</div>
+					
+					<div style="background: rgb(230, 231, 231) none repeat scroll 0% 0%; float: left; width: 100%; border-radius: 5px;">
+						<div class="col-lg-4 text-left">
+							<h4><i class="fa fa-angle-left" aria-hidden="true"></i></h4>
+						</div>
+						<div class="col-lg-4 text-center">
+							<h4>MAY 2016</h4>
+						</div>
+						<div class="col-lg-4 text-right">
+							<h4><i class="fa fa-angle-right" aria-hidden="true"></i></h4>
+						</div>
+					</div>
+					
+		<div style="float: left; width: 100%; border: 1px solid rgb(230, 231, 231); border-radius: 5px;">
+					<div style="width: 100%; float: left;">
+						<div class="date">
+							<h4>30</h4>
+						</div>
+						<div class="date">
+							<h4>31</h4>
+						</div>
+						<div class="date">
+			<h4>1<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon.png"></h4>
+						</div>
+						<div class="date">
+			<h4>2<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+		   <h4>3<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+		   <h4>4<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+		   <h4>5<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+					</div>
+					
+					<div style="width: 100%; float: left;">
+						<div class="date">
+		<h4>6<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon.png"></h4>
+						</div>
+						<div class="date">
+		<h4>7<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+		<h4>8<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+		<h4>9<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+		<h4>10<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+		<h4>11<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+		<h4>12<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+					</div>
+					
+					<div style="width: 100%; float: left;">
+						<div class="date">
+			<h4>13<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon.png"></h4>
+						</div>
+						<div class="date">
+			<h4>14<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+			<h4>15<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+		    <h4>16<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+			<h4>17<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+			<h4>18<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+			<h4>19<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+					</div>
+					
+					<div style="width: 100%; float: left;">
+						<div class="date">
+			<h4>20<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon.png"></h4>
+						</div>
+						<div class="date">
+		   <h4>21<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+			<h4>22<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+			<h4>23<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+			<h4>24<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+			<h4>25<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+			<h4>26<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+					</div>
+					
+					<div style="width: 100%; float: left;">
+						<div class="date">
+			 <h4>27<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon.png"></h4>
+						</div>
+						<div class="date">
+			  <h4>28<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+			 <h4>29<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+		     <h4>30<br/><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-content-icon-1.png"></h4>
+						</div>
+						<div class="date">
+							<h4>1</h4>
+						</div>
+						<div class="date">
+							<h4>2</h4>
+						</div>
+						<div class="date">
+							<h4>3</h4>
+						</div>
+					</div>
+					
+					</div>
+					
+					
+					
+				</div>
+				
+            
+            </div--->
+            <!--div class="col-sm-4">
+				<div class="col-sm-12 aplly-schedule">
+					<h4>APPLY TO ALL CHECKED CELLS <i class="fa fa-check" aria-hidden="true"></i></h4>
+					<h5>Start here:</h5>
+					<div class="form-group">
+						<input type="text" class="form-control" required="required" placeholder="Enter Number:6">
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" required="required" placeholder="Enter Price:$100">
+					</div>
+					<div class="form-group" style="width:100%;">
+						<button type="submit" class="btn btn-primary btn-lg" style="background: rgb(77, 194, 255) none repeat scroll 0% 0%; border: medium none rgb(77, 194, 255);width:100%;">APLLY</button>
+					</div>
+				</div>
+            </div-->
+			<div class="col-lg-6">
+			<style>
+			.header a{
+				text-decoration:none;
+				
+			}
+			.header{
+				background: rgb(230, 231, 231) none repeat scroll 0 0;
+			border-radius: 5px;
+			float: left;
+			width: 100%;
+			}
+			#calendar .label-calendar .title {
+			  display: inline-block;
+			  float: left;
+			  font-size: 14px;
+			  position: relative;
+			  text-align: center;
+			  width: 14.2857%;
+			}
+			.dates li {
+			  float: left;
+			  list-style: outside none none;
+			  text-align: center;
+			  width: 14.2857%;
+			  min-height: 92px;
+			  font-size:18px;
+			}
+			</style>
+			<?php 
+			require_once get_template_directory().'/inc/calendar.class.php'; 
+			$currentUrl = site_url().'/schedule-tours';
+			$calendar = new Calendar($currentUrl);
+			
+			echo $calendar->show();
+			
+			?>
+			</div>
+			
+			<div class="form-group col-lg-12 text-center" style="float: left;">
+				<button type="submit" class="btn btn-primary btn-lg" style="background: rgb(77, 194, 255) none repeat scroll 0% 0%; border: medium none rgb(77, 194, 255);">SUBMIT</button>
+			</div><!--/.col-sm-4-->
+        </div>
+    </section><!--/#contact-page-->
+
+	</div>
+</div>
+
+<?php get_footer(); ?>

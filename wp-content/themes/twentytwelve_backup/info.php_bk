@@ -1,0 +1,92 @@
+<?php
+/**
+ * Template Name: INFORMATION
+ * The template for displaying all pages
+ *
+ * This is the template that displays all pages by default.
+ * Please note that this is the WordPress construct of pages
+ * and that other 'pages' on your WordPress site will use a
+ * different template.
+ *
+ * @package WordPress
+ * @subpackage Twenty_Twelve
+ * @since Twenty Twelve 1.0
+ */
+
+get_header(header); 
+session_start();
+
+$data = $_SESSION['operator'];
+//print_r($data);
+if($_SESSION['rideTourUserData']){
+	$data = $_SESSION['rideTourUserData']->detail;
+}
+
+?>
+<div id="primary" class="site-content">
+	<div id="content" role="main">
+		 <section id="contact-page" class="container-fluid" style="padding: 0px;">
+        <div class="row">
+            <div class="col-sm-1" style="background: rgb(233, 233, 233) none repeat scroll 0% 0%; height: 700px; padding: 0 0 0 15px">
+				<ul class="left-ul" style="list-style: outside none none; padding: 0px;">
+                    
+                    <li style="background: rgb(100, 163, 196) none repeat scroll 0% 0%; border-left: 5px solid rgb(100, 163, 196);"><a href="<?php echo site_url(); ?>/operator-info/"><img src="<?php bloginfo( 'template_url' ); ?>/img/stting-info-1.png"></a></li>
+                    <li style="border-left: 6px solid rgb(255, 117, 117);"><a href="<?php echo site_url(); ?>/tour-list-info"><img src="<?php bloginfo( 'template_url' ); ?>/img/setting-icon.png"></a></li>
+                    <li style="border-left: 6px solid rgb(187, 226, 104);"><a href="<?php echo site_url();?>/schedule-tours/"><img src="<?php bloginfo( 'template_url' ); ?>/img/calendar-icon-1.png"></a></li>
+                </ul>
+			</div>
+            <div class="col-sm-6">
+            <div class="col-sm-12">
+				<h1>TOUR OPERATOR INFO</h1>
+                <div class="status alert alert-success" style="display: none"></div>
+                <form id="main-contact-form" class="contact-form" name="contact-form" method="post" action="sendemail.php" role="form">
+                    <div class="row">
+                        <div class="col-sm-12" style="float:left;background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 1px solid rgb(204, 204, 204); padding: 20px;">
+						<div class="col-sm-6">
+                            <div class="form-group">
+                        Name:&nbsp <input type="text" class="form-control" required="required" placeholder="Name" value="<?php echo $data->name; ?>">
+                            </div>
+                           
+							<div class="form-group">
+         Email:&nbsp  <input type="text" class="form-control" required="required" placeholder="Email address" value="<?php echo $data->email; ?>">
+                            </div>
+							<div class="form-group">
+            Point of contact:&nbsp   <input type="text" class="form-control" required="required" placeholder="Main PoC/Owner" value="<?php echo $data->poc; ?>">
+                            </div>
+							<div class="form-group">
+               City:&nbsp   <input type="text" class="form-control" required="required" placeholder="Office address" value="<?php echo $data->city; ?>">
+                            </div>
+							<div class="form-group">
+               Phone:&nbsp <input type="text" class="form-control" required="required" placeholder="Main phone number" value="<?php echo $data->phone; ?>">
+                            </div>
+							<div class="form-group">
+                Website:&nbsp <input type="text" class="form-control" required="required" placeholder="My website" value="<?php echo $data->website; ?>">
+								
+                            </div>
+						</div>
+				<div class="col-sm-6">		
+							<div class="form-group">
+               Change Password:&nbsp <input type="text" class="form-control" required="required" placeholder="Main phone number" value="<?php echo $data->password; ?>">
+                            </div>
+
+							</div>
+                        </div>
+                    </div>
+                </form>
+				
+            </div><!--/.col-sm-8-->
+            </div><!--/.col-sm-8-->
+            <div class="col-sm-4 text-right">
+				
+            </div>
+			
+			<!--div class="form-group col-lg-12 text-center" style="float: left;">
+				<button type="submit" class="btn btn-primary btn-lg" style="background: rgb(77, 194, 255) none repeat scroll 0% 0%; border: medium none rgb(77, 194, 255);">SUBMIT</button>
+			</div--><!--/.col-sm-4-->
+        </div>
+    </section><!--/#contact-page-->
+
+	</div>
+</div>
+
+<?php get_footer(); ?>

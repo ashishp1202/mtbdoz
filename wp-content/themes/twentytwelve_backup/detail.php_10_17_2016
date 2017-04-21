@@ -1,0 +1,544 @@
+<?php
+/**
+ * Template Name: DETAIL
+ * The template for displaying all pages
+ *
+ * This is the template that displays all pages by default.
+ * Please note that this is the WordPress construct of pages
+ * and that other 'pages' on your WordPress site will use a
+ * different template.
+ *
+ * @package WordPress
+ * @subpackage Twenty_Twelve
+ * @since Twenty Twelve 1.0
+ */
+
+get_header();
+$detect = new Mobile_Detect;
+
+?>
+<style>
+img.size-full, img.size-large, img.header-image, img.wp-post-image {
+    height: 150px;
+    max-width: 100%;
+    width: 100%;
+}
+.slider-inner ul {
+  padding: 31% !important;
+}
+.slider-inner a {
+  background-size: 100% 100% !important;
+  border-radius: 6px;
+  box-shadow: none !important;
+}
+
+.inner ul li {
+  border-radius: 6px;
+  width: 106px !important;
+}
+.inner ul li a {
+  border-radius: 6px;
+}
+#thumbnail-slider .thumb {
+  background-size: 100% 100% !important;
+}
+::-webkit-input-placeholder {
+   color: #000 !important;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: #000 !important;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: #000 !important;  
+}
+
+:-ms-input-placeholder {  
+   color: #000 !important;  
+}
+.description-block ul li{
+	list-style: inside disc;
+	
+}
+.description-block ol li {
+  list-style: inside disc;
+}
+</style>
+
+
+
+<script type="text/javascript">
+(function( $ ) {
+	$(document).ready(function(){
+		$("#select_ride").click(function(){		
+		$("#myModal").modal('show');
+		});
+	});
+ })(jQuery);	
+</script>
+
+
+<div id="primary" class="site-content">
+	<div id="content" role="main">
+<?php
+	
+require_once get_template_directory().'/inc/tourlib.php';
+global $wp_query;
+$tourname = $wp_query->query_vars['tourname']; 
+
+
+$tourObj = new tourLibrary();
+$detail = $tourObj->tour_detail($tourname);
+$symbolTable = array('USD' => '$', 'GBP' => '£', 'EUR' => '€');
+$totalImages = count($detail->images);
+$cols_slider = empty($totalImages) ? 1 : $totalImages;
+//$detail = $detail->tours;
+/* echo "<pre>";
+print_r($detail);
+echo "</pre>"; */
+$sapDates = array();
+$sapPrices = array();
+if(!empty($detail->sap)){
+foreach($detail->sap as $item){
+	$sapPrices[] = $item->price;
+	$sapDates[]= $item->time;
+}
+}
+$thumbnailTour = $detail->thumbnails;
+$thumbnailTable = array();
+if(!empty($thumbnailTour)){
+	foreach($thumbnailTour as $key => $thumbTour){
+		$getthumbName = explode('-',$thumbTour);
+		$thumbnailTable[$key] = $getthumbName[1];
+	}
+}
+?>
+	
+	<?php 
+	if($_SESSION['tourbookMessage']){ ?>
+	<div class="alert alert-success fade in"><a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a><strong></strong> <?php echo $_SESSION['tourbookMessage']; ?></div>
+	<?php 
+			unset($_SESSION['tourbookMessage']);
+	} ?>
+		  <section id="contact-page" class="container">
+        <div class="row">
+            <div class="col-sm-9">
+				<div id="remove-text" style="color: transparent; float: left;">
+				<div class="col-lg-12">
+				
+				<!--banner start-->
+				<link href="<?php bloginfo( 'template_url' ); ?>/css/ninja-slider.css" rel="stylesheet" />
+				<script src="<?php bloginfo( 'template_url' ); ?>/js/ninja-slider.js"></script>
+				<link href="<?php bloginfo( 'template_url' ); ?>/css/thumbnail-slider.css" rel="stylesheet" type="text/css" />
+				<script src="<?php bloginfo( 'template_url' ); ?>/js/thumbnail-slider.js" type="text/javascript"></script>
+				<!--banner start-->
+		<div id="ninja-slider" style="float: left; border-radius: 6px;">
+            <div class="slider-inner">
+                <ul>
+				<?php if($detect->isMobile()):
+				if(!empty($detail->thumbnails)):
+				foreach($detail->thumbnails as $img):
+				?>
+					<li><a class="ns-img" href="<?php echo $img;?>"></a></li>
+				<?php
+				endforeach;
+				endif;
+				else: ?>
+				<?php
+					if(!empty($detail->images)):
+					foreach($detail->images as $img):
+				?>
+                    <li><a class="ns-img" href="<?php echo $img;?>"></a></li>
+                    <?php endforeach; ?>
+					<?php else: ?>
+					<li><a class="ns-img" href="<?php bloginfo( 'template_url' ); ?>/img/banner.png"></a></li>
+				<?php endif; ?>
+				<?php endif; ?>
+                </ul>             
+            </div>
+        </div>
+        <div id="thumbnail-slider" style="float:left;">
+            <div class="inner">
+                <ul>
+				<?php 
+				if($detect->isMobile()):
+				if(!empty($detail->thumbnails)):
+				foreach($detail->thumbnails as $img):
+				?>
+					<li>
+                        <a class="thumb" href="<?php echo $img;?>"></a>
+                    </li>
+				<?php
+				endforeach;
+				endif;
+				?>
+				<?php
+				else:
+					if(!empty($detail->images)):
+					foreach($detail->images as $img):
+					$setImg = $img;
+					$sliderthumb = explode('-',$setImg);
+					$sliderthumb = $sliderthumb[1];
+					if(in_array($sliderthumb, $thumbnailTable)){
+						$thumbkey = array_search($sliderthumb, $thumbnailTable);
+						$setImg = $thumbnailTour[$thumbkey];
+					}
+				?>
+                    <li>
+                        <a class="thumb" href="<?php echo $setImg;?>"></a>
+                    </li>
+					<?php endforeach; ?>
+					<?php else: ?>
+					<li><a class="thumb" href="<?php bloginfo( 'template_url' ); ?>/img/banner.png"></a></li>
+					<?php endif;
+				endif;
+
+					?>
+                </ul>
+            </div>
+        </div>					
+			
+				
+
+
+				
+
+				<!--banner end-->
+					
+					
+				</div>
+				</div>
+				
+				<div class="col-sm-12" style="float: left; padding: 20px 0; z-index: 999; width:100%;">
+					
+					<div class="col-sm-8" style="float: left;">
+						
+						
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h4 style="margin-bottom: 0px;"><strong>Date</strong><span id="addEventDate" href="javascript:void(0);"><i class="caret"></i></span></h4>
+							<h5 style="margin-top: 0px;" class="detail-date"><?php echo $detail->sap[0]->time; ?></h5>
+						</div>
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h4 style="margin-bottom: 0px;"><strong>Ride Type</strong></h4>
+							<h5 style="margin-top: 0px;"><?php echo str_replace('_',' ',$detail->tour->tourType); ?></h5>
+						</div>
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h4 style="margin-bottom: 0px;"><strong>Duration</strong></h4>
+							<h5 style="margin-top: 0px;"><?php echo $detail->tour->days; ?>days</h5>
+						</div>
+						<div id="hiddensap" style="float:left;" ></div>
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h4 style="margin: 0px;"><strong>Rating</strong></h4>
+							<h5 style="margin-top: 0px;"><!--?php 
+								
+								$rate = $detail->tour->ratedPeople;
+								if($rate == 0)
+								{
+								echo "";
+								}
+								else
+								{
+								for($i=1; $i<=$rate; $i++)
+								{
+								echo"*";
+								}
+								}
+								
+								
+								?-->
+								<?php
+								
+								$rate = $detail->tour->ratedPeople;
+								$rateSum = $detail->tour->ratingSum;
+								if(!empty($rate) && !empty($rateSum)){
+									$rating = $rateSum/$rate;
+									echo number_format($rating,2,'.','');
+								}
+								
+								?>
+								</h5>
+						</div>
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h4 style="margin: 0px;"><strong>Destination</strong></h4>
+							<h5 style="margin-top: 0px; margin-bottom: 0px;"><?php echo $detail->tour->endPoint; ?></h5>
+						</div>
+					</div>
+					<div class="col-sm-4 text-right" style="float: right;">
+						<div class="col-sm-5 text-right">
+				<h4 style="margin: 0px; color: rgb(255, 77, 77);font-size:25px;"><?php $rideprice = empty($detail->sap[0]->price) ? $detail->tour->price : $detail->sap[0]->price;  echo $symbolTable[$detail->tour->currency].'<span class="updateprice">'.round($rideprice).'</span>'; ?></h1>
+							<h5 style="margin: 0px;">per ride</h5>
+						</div>
+						<div class="col-sm-7 text-right">
+							<button type="submit" id="select_ride" class="detail_select_ride btn btn-primary btn-lg"style="background:#30769A;">Book it</button>
+						</div>
+					</div>
+                
+				</div>
+				
+
+				<div class="col-sm-12 description-block" style="float: left; padding: 20px; z-index: 999;font-size:15px;">
+					<h4 style="margin: 0px;"><strong><?php echo substr($detail->tour->title,0,40); echo (strlen($detail->tour->title) > 40) ? '...' : ''; ?></strong></h4>
+					<p><?php echo $detail->tour->description; ?></p>
+				</div>
+				
+				
+            </div><!--/.col-sm-8-->
+            <div class="col-sm-3 top-rides-bar2">
+				<div class="col-sm-12" style="background: rgb(241, 241, 241) none repeat scroll 0% 0%; border-radius: 5px; padding: 0; padding: 9px 0;">
+					<h4 style="padding-left: 15px;">TOP RIDES IN YOUR REGION</h4>
+	<?php //$args = array( 'posts_per_page' => 4, 'category' => 4 );
+				$args = array('orderType' => 'ratingSum', 'order' => 'desc', 'startAt' => 1, 'endAt' => 5);
+			/* 	if(!empty($detail->tour->country)){
+					$args['country'] = $detail->tour->country;
+				}
+				 */
+				$topRides = $tourObj->topRides($args);
+				
+				//$myposts = get_posts( $args );
+//foreach ( $myposts as $post ) : setup_postdata( $post ); 
+				foreach($topRides->data->tours as $ride):	
+				
+?>				
+				<div class="col-lg-12" style="margin-bottom: 10px;">
+						<a href="<?php echo site_url();?>/detail/<?php echo $ride->tour->name; ?>/<?php echo $ride->tour->id ?>">
+				<?php if(empty($ride->images[0])): ?>
+						<img class="attachment-post-thumbnail size-post-thumbnail wp-post-image" src="<?php bloginfo( 'template_url' ); ?>/img/img-tmp.png">
+				<?php else: ?>
+				<?php if($detect->isMobile()):
+						if(empty($ride->thumbnails[0])): ?>
+						<img class="attachment-post-thumbnail size-post-thumbnail wp-post-image" src="<?php bloginfo( 'template_url' ); ?>/img/img-tmp.png" style="width:300px">
+					<?php else: ?>
+						<img class="attachment-post-thumbnail size-post-thumbnail wp-post-image" style="width:300px" src="<?php echo $ride->thumbnails[0]; ?>">
+						<?php endif;
+						else: ?>
+						<img class="attachment-post-thumbnail size-post-thumbnail wp-post-image" style="width:300px" src="<?php echo $ride->images[0]; ?>">
+					<?php endif; ?>
+				<?php endif; ?>
+
+						
+
+						<div class="side-bar">
+							<div class="col-lg-12 text-right detail_star">
+								<img src="<?php bloginfo( 'template_url' ); ?>/img/icon.png">
+								<h5><?php 
+								$rating = 0;
+								$ratingSum = $ride->tour->ratingSum;
+								$ratedPeople = $ride->tour->ratedPeople;
+								if($ratingSum > 0 && $ratedPeople > 0 ){
+									$rating = $ratingSum/$ratedPeople;
+								}
+								$rating = empty($rating) ? '0' : $rating;
+								echo $rating; ?></h5>
+							</div>
+							<div class="col-lg-12 text-right detail_price">
+								<h1 style="margin: 0px;font-size:25px;"><?php echo $symbolTable[$ride->tour->currency].''.$ride->tour->price; ?></h1>
+								<h5 style="margin: 0px;">per ride</h5>
+							</div>
+							<div class="col-lg-6" >
+								<h5 style="margin-bottom: 0px;"><strong><?php echo ucfirst($ride->tour->title); ?></strong></h5>
+								<h5 style="margin-top: 0px;"><?php echo $ride->tour->description;  ?></h5>
+							</div>
+							<div class="col-lg-6 text-right detail_view_ride">
+						<button type="button" class="btn btn-primary btn-lg" style="background: #30769A; border: 0px none; padding: 9px;font-size:11px;font-weight:bold;margin-top:10% !important;">VIEW</button>
+						
+							</div>
+						</div>
+						</a>
+					</div>
+					<?php endforeach; 
+//wp_reset_postdata();?>								
+					
+					<div class="col-lg-12 text-right">
+						<a href="#"><h4 style="color:#34495E;"></h4></a>
+					</div>
+				</div>
+				
+				<img src ="<?php bloginfo( 'template_url' ); ?>/img/add3.png" style="width: 100%; padding-top: 20px;">
+				
+            </div>
+			
+			
+			<div class="col-lg-12 top-rides-bar">
+			<h2 style="text-align: center; color: rgb(120, 120, 120); margin-bottom: 35px;"><i class="icon-angle-down"></i> TOP RIDES IN YOUR REGION</h2>
+            <div class="row scroll-pane-tours"  style="height: 269px; overflow-y: hidden; overflow-x: scroll; white-space: nowrap;">
+				
+               <?php //$args = array( 'posts_per_page' => 8, 'category' => 4 );
+				//$myposts = get_posts( $args );
+			/* 	require_once get_template_directory().'/inc/tourlib.php';
+				$tourObj = new tourLibrary();
+				$args = array('orderType' => 'ratedPeople', 'order' => 'desc', 'startAt' => 1, 'endAt' => 9);
+				$topRides = $tourObj->topRides($args); */
+				$symbolTable = array('USD' => '$', 'GBP' => '£', 'EUR' => '€');
+				foreach($topRides->data->tours as $ride):
+				?>
+				<div class="top-rides" style="margin-bottom: 0px; padding:1px">
+					<a href="<?php echo site_url().'/detail/'.$ride->tour->name.'/'.$ride->tour->id; ?>">
+					<?php if(empty($ride->images[0])): ?>
+						<img class="attachment-post-thumbnail size-post-thumbnail wp-post-image" src="<?php bloginfo( 'template_url' ); ?>/img/img-tmp.png" style="width:300px">
+					<?php else: ?>
+						<img class="attachment-post-thumbnail size-post-thumbnail wp-post-image" src="<?php echo $ride->images[0]; ?>">
+					<?php endif; ?>
+					</a>
+					<div class="side-bar" style="width:300px;">
+						<div class="col-lg-12 text-right">
+							<img src="<?php bloginfo( 'template_url' ); ?>/img/icon.png">
+								<h5><?php 
+							$rating = 0;
+							$ratingSum = $ride->tour->ratingSum;
+							$ratedPeople = $ride->tour->ratedPeople;
+							if($ratingSum > 0 && $ratedPeople > 0 ){
+								$rating = $ratingSum/$ratedPeople;
+							}
+							$rating = empty($rating) ? '0' : $rating;
+							echo $rating; ?></h5>
+						</div>
+						<div class="col-lg-12 text-right" style="margin-top: 55px;">
+							<h1 style="margin: 0px;"><?php echo $symbolTable[$ride->tour->currency].''.$ride->tour->price; ?></h1>
+							<h5 style="margin: 0px;">per ride</h5>
+						</div>
+						<div class="col-lg-7 col-xs-7" style="margin-top: 39px;">
+							<h5 style="margin-bottom: 0px;"><strong><?php echo ucfirst($ride->tour->title); ?></strong></h5>
+							<h5 style="margin-top: 0px;"><?php echo $ride->tour->description; ?></h5>
+						</div>
+						<div class="col-lg-5 col-xs-5 text-right" style="padding-top: 15px;">
+							<a href="<?php echo site_url().'/detail/'.$ride->tour->name.'/'.$ride->tour->id; ?>"><button type="submit" class="btn btn-primary btn-lg" style="border: 0px none; padding: 9px; background: rgb(45, 115, 151) none repeat scroll 0% 0%;">VIEW</button></a>
+						</div>
+					</div>
+				</div>
+				<?php endforeach; wp_reset_postdata();?>
+
+            </div><!--/.row-->
+        </div>
+			
+			
+			
+			
+			
+			<!--/.col-sm-4-->
+        </div>
+    </section><!--/#contact-page-->
+
+
+	</div>
+</div>
+
+
+<!--modal-->
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <div class="modal-body">
+				<section id="contact-page" class="container" style="padding: 0px;">
+	<div class="col-sm-12" style="background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 4px solid rgb(0, 0, 0); padding: 20px;">
+				
+                <div class="status alert alert-success" style="display: none"></div>
+                <form  name="form1" method="get" action="<?php echo site_url(); ?>">
+					<h1>BOOK:<?php echo substr($detail->tour->title,0,40); echo (strlen($detail->tour->title) > 40) ? '...' : ''; ?></h1>
+                    <div class="row">
+                        <div class="col-sm-9" >
+							<input type="hidden" name="option" value="1"/>
+							<input type="hidden" name="task" value="bookPost"/>
+                            <div class="form-group">
+                                <input type="text" name="user_name" class="form-control" required="required" placeholder="Lead Name" style="width:100%;">
+                            </div>
+                            <div class="form-group">
+							<input type="email" name="lead_email" class="form-control" required="required" placeholder="Lead  Email address">
+								<input type="hidden" name="currency" value="<?php echo $detail->tour->currency; ?>">
+								<input type="hidden" name="tour_id" value="<?php echo $detail->tour->id; ?>">
+                            </div>
+                            <div class="form-group">
+					<input type="text" name="participants" class="form-control" placeholder="Number of participants" style="width:100%;">
+                                
+                            </div>
+                            
+							<div class="form-group">
+								<textarea name="message" id="message" class="form-control" rows="8" placeholder="Note/Special requests "></textarea>
+							</div>
+							
+					
+                        </div>
+						<div class="col-lg-3">
+							<div class="form-group" style="margin-bottom:5px;">
+								<?php $date = $detail->sap[0]->time; 
+								
+								if(!empty($date))
+								{
+								?>
+								<div style="text-align: center; border: 1px solid rgb(189, 195, 199); border-radius: 5px; padding: 13px;"> <?php echo $detail->sap[0]->time; ?> </div>
+                            </div>
+							<?php } ?>
+							<div class="text-center" style="background: transparent url(<?php bloginfo( 'template_url' ); ?>/img/push_icon.png) no-repeat scroll 0% 0% / 100% 100%; height: 120px; padding-top: 42px;">
+								<h3 style="margin: 0px; color: rgb(255, 77, 77);"><b><?php echo $symbolTable[$detail->tour->currency]; ?> <?php $price_detail = empty($detail->sap[0]->price) ? $detail->tour->price : $detail->sap[0]->price; echo '<span class="updateprice">'.round($price_detail).'</span>';?></b></h3>
+								<h5 style="margin: 0px;">per ride</h5>
+							</div>
+							
+						</div>
+                    </div>
+					<input type="submit" name="submit" value="SEND" class="btn btn-danger" style="background: rgb(77, 194, 255) none repeat scroll 0% 0%; border: medium none rgb(77, 194, 255); padding: 7px; font-size: 23px;">
+                </form>
+            </div>
+</section>
+
+                
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.ui-datepicker{
+	font-size:18px !important;
+}
+</style>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.min.css">
+<script async src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+<!--modal-->
+<script>
+(function( $ ) {
+	$( function() {
+		// An array of dates
+	var selectedDays = ["<?php echo implode('","',$sapDates) ?>"];
+
+
+	var selectedPrice = [<?php echo implode(',',$sapPrices) ?>];
+		$('#hiddensap').datepicker({
+			dateFormat: 'yy-mm-dd',
+			onSelect: function(value,data){
+				var priceIndex = selectedDays.indexOf(value);
+				if(priceIndex > -1){
+					var newprice = selectedPrice[priceIndex];
+					$('.updateprice').html(newprice);
+					$('.detail-date').html(value);
+
+				}
+				$('#hiddensap').hide();
+			},
+			beforeShowDay: function(date){
+				var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+				m = parseInt(m)+1;
+				m = (m < 10) ? '0'+m : m;
+				d = (d < 10) ? '0'+d : d;
+				var highlight = y+'-'+m+'-'+d;
+				if ($.inArray( highlight, selectedDays ) > -1) {
+
+					 return [true, "event", highlight];
+				} else {
+					 return [true, '', ''];
+				}
+			}
+		}).hide();
+		$('#addEventDate').click(function(){
+			$('#hiddensap').toggle();
+		});
+	});
+})(jQuery);
+</script>
+<style>
+.event a {
+    background-color: #42B373 !important;
+    background-image :none !important;
+    color: #ffffff !important;
+}
+</style>
+<?php get_footer(); ?>

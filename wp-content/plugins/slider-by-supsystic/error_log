@@ -1,0 +1,1 @@
+[09-Jan-2017 09:26:11 America/Chicago] PHP Fatal error:  Call to undefined function add_action() in /home1/ridetour4u/public_html/wp-content/plugins/slider-by-supsystic/app/SupsysticSlider.php on line 28

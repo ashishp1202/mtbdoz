@@ -1,0 +1,711 @@
+<?php
+/**
+ * Template Name: SEARCH
+ * The template for displaying all pages
+ *
+ * This is the template that displays all pages by default.
+ * Please note that this is the WordPress construct of pages
+ * and that other 'pages' on your WordPress site will use a
+ * different template.
+ *
+ * @package WordPress
+ * @subpackage Twenty_Twelve
+ * @since Twenty Twelve 1.0
+ */
+
+get_header();
+?>
+
+<script src="<?php bloginfo( 'template_url' ); ?>/js/jquery.twbsPagination.min.js"></script>
+<!--script src="<?php bloginfo( 'template_url' ); ?>/js/jscrollpane.js"></script>
+<link rel="stylesheet" href="<?php bloginfo( 'template_url' ); ?>/css/jscrollpane.css"-->
+<script>
+(function($){
+$(document).ready(function(){
+    $(".advance").click(function(){
+        $(".testab").show();
+		 $('.advance2').show();
+		 $('.button-go-1').hide();
+		 $('.button-go-2').show();		
+    	$('.advance').hide();
+    });
+
+    $(".advance2").click(function(){
+		$(".testab").hide();
+        $('.advance').show();
+		$('.button-go-2').hide();
+		 $('.button-go-1').show();
+    	$('.advance2').hide();
+    });
+	//$('.search-result-block-outer').jScrollPane();
+});
+})(jQuery);
+</script>
+<div id="primary" class="site-content" style="margin:4.2rem 0 0;">
+	<div id="content" role="main">
+<?php
+	
+require_once get_template_directory().'/inc/tourlib.php';
+$selectedSort = $_REQUEST['sortby']; 
+$tourObj = new tourLibrary();
+$search = $tourObj->searchTours();
+$search = $search->tours;
+$locationTable = array();
+
+if(!empty($search))
+{
+$totalTours = count($search);
+
+$searchCollection = array_chunk($search, 10);
+
+/* echo "<pre>";
+print_r($searchCollection);
+echo "</pre>"; */
+$i = 0;
+
+
+
+foreach ($search as $item) {	
+	$rideprice = $item->tour->price;
+	$locationTable[$item->tour->id] = array('address' => $item->tour->endpoint.', '.$item->tour->state.', '.$item->tour->country, 'name' =>$item->tour->title, 'link' => $item->tour->name,  'price' => round($rideprice)); 
+	
+    $i++;
+    // if there are 15 $item[number] in this foreach, I want get the value : 15
+}
+}
+$newlocations = array();
+if(!empty($locationTable))
+{
+foreach($locationTable as $key =>  $item){
+	$address = $item['address'];
+if($address){	
+	$geo = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&sensor=false');
+	$geo = json_decode($geo, true);		
+		if ($geo['status'] = 'OK') {
+			$status = true;
+			$latitude = $geo['results'][0]['geometry']['location']['lat'];;
+			$longitude =  $geo['results'][0]['geometry']['location']['lng'];
+			if(!empty($latitude) && !empty($longitude)){
+				$newlocations[] = (object) array('lat' => $latitude, 'lng' => $longitude, 'id' =>$key , 'title' =>$item['name'] , 'price' => $item['price']);
+			}
+		}
+	}
+}
+}
+?>
+
+		
+		
+
+		<section id="services" class="emerald banner-section" style="position: unset; padding:0px;">
+			<div class="container">
+				<form  method="get" name="searchform" id="searchform" action="<?php echo site_url();?>/search">
+					<div class="row">
+						<h3 style="margin: 9px 0; color:#818C92;">SELECT YOUR RIDE </h3>
+						<div class="col-md-2 col-sm-12 background-color">
+						   
+							<div class="media">
+								<div class="pull-left">               
+									<div id="icon-date">&nbsp;</div>
+								</div>
+								<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+								<div class="media-body">
+									<input type="text" name="date" class="banr-input select-btn datepicker" value="<?php echo empty($_REQUEST['date']) ? (strftime("%b %e %Y")) : $_REQUEST['date']; ?>"/>
+								</div>
+							</div>
+							<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+							<script>
+							  (function( $ ) {
+							  $( function() {
+								$( ".datepicker" ).datepicker({
+									dateFormat: "M d yy",
+									onSelect: function(dateText, inst){
+										var dateVal = inst.currentYear+'-'+inst.currentMonth+'-'+inst.currentDay;
+										$("#selecteddate").val(dateVal);
+										//$("#icon-date").html(inst.currentDay);
+									}
+								});
+							  } );
+							   })(jQuery);
+							</script>
+							<style>
+
+							</style>
+							<input type="hidden" name="selecteddate" id="selecteddate" />
+						</div>
+						<div class="col-md-5 col-sm-12 background-color">
+							<div class="media">
+								<div class="pull-left">
+									<img src ="<?php bloginfo( 'template_url' ); ?>/img/icon2.png">
+								</div>
+								<div class="media-body">
+									<input style="color:#fff;" type="text" name="endPoint" value="<?php echo $_REQUEST['endPoint'];  ?>" class="banr-input select-btn" placeholder="Destination"/>
+								</div>
+							</div>
+						</div><!--/.col-md-4-->
+						<div class="col-md-3 col-sm-12 pading">
+							<div class="">                       
+								<div class="">
+									<!-- <input class="banr-input" placeholder="Destination"/> -->
+									<?php $rideType = $_REQUEST['tourType']; ?>
+									<select class="guidetour-select ridetour selectpicker" name="tourType">
+										<option value="">Ride type</option>								
+										<option value="">All</option>							
+										<option <?php echo ($rideType == 'ALL_MOUNTAIN') ? 'selected="selected"' : ''; ?> value="ALL_MOUNTAIN">All Mountain</option>
+										<option <?php echo ($rideType == 'CROSS_COUNTRY') ? 'selected="selected"' : ''; ?> value="CROSS_COUNTRY">Cross Country</option>
+										<option <?php echo ($rideType == 'DOWNHILL') ? 'selected="selected"' : ''; ?> value="DOWNHILL">Downhill</option>
+									
+									</select>
+								
+								</div>
+							</div>
+						</div><!--/.col-md-4-->
+						<div class="col-md-1 col-sm-12" style="padding:8px 22px;">
+							<!--button class="btn btn-danger" type="button" style="background: rgb(77, 194, 255) none repeat scroll 0% 0%; border: medium none rgb(77, 194, 255);">GO</button-->
+							<input type="submit" name="form-submit" value="GO" class="btn btn-danger button-go-1" style="background: rgb(77, 194, 255) none repeat scroll 0% 0%; border: medium none rgb(77, 194, 255); padding: 10px; font-size: 19px;color:#000; border-radius: 4px; font-weight:400;">
+							
+						</div>
+						
+					</div>
+					<div class="row testab" style="display:none">
+			
+						<div class="col-md-2 col-sm-12 background-color" style="padding: 8px 10px;">
+							<div class="media">
+								
+								<div class="media-body">
+									<!-- <input class="banr-input" placeholder="Destination"/> -->
+									<input type="text" class="banr-input" name="group" style="margin-bottom: -1px;" placeholder="Group size"/>
+										<!--select class="select-btn" name="group" required> 
+											<option> Group Size</option>
+											<option>Any</option>
+											<option>Min value is 1</option>
+											<option> Max value is 99</option>
+										</select-->
+								</div>
+							</div>
+						</div>
+				
+						<div class="col-md-2 col-sm-12 pading">
+							<div class="">
+								
+								<div class="">
+									<!-- <input class="banr-input" placeholder="Destination"/> -->
+									
+									<select class="guidetour-select selectpicker" name="guidedTour" required> 
+										<option> Guided </option>
+										<option> Any</option>
+										<option>Guided</option>
+										<option> Self-guided</option>
+									</select>
+									
+								</div>
+							</div>
+						</div>
+				
+						<div class="col-md-2 col-sm-12 pading">
+							<div class="">
+								
+								<div class="">
+									<!-- <input class="banr-input" placeholder="Destination"/> -->
+									<select class="guidetour-select selectpicker" name="days" required> 
+										<option> Duration </option>
+										<option> Any</option>
+										<option>Single day</option>
+										<option>1-7 days</option>
+										<option>8 days and above</option>
+									</select>
+								</div>
+							</div>
+						</div>
+				
+						<div class="col-md-2 col-sm-12 pading">
+							<div class="">
+								
+								<div class="">
+									<!-- <input class="banr-input" placeholder="Destination"/> -->
+									<select class="guidetour-select selectpicker" name="difficultyLevel" required> 
+										<option>Difficulty level</option>
+										<option>Any</option>
+										<option>Easy</option>
+										<option>Medium</option>
+										<option>Difficult</option>
+									</select>
+								</div>
+							</div>
+						</div>
+				
+						<div class="col-md-2 col-sm-12 pading">
+							<div class="">
+							   
+								<div class="">
+									<!-- <input class="banr-input" placeholder="Destination"/> -->
+									<select class="guidetour-select selectpicker" name="hiredBikes" required> 
+										<option> Hired bike </option>
+										<option>Any</option>
+										<option>Hired</option>
+										<option>Own</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" value="<?php echo $selectedSort; ?>" name="sortby" id="sortby" />
+						<div class="col-md-1 col-sm-12" style="padding:8px 22px;">
+							<input type="submit" name="search" value="GO" class="btn btn-danger button-go-2" style="background: rgb(77, 194, 255) none repeat scroll 0% 0%; border: medium none rgb(77, 194, 255); padding: 10px; font-size: 19px; color:#000; display:none; border-radius:4px; font-weight:400;">
+						</div>
+			
+					</div>
+			   	</form>
+				<div class="col-md-12 col-sm-12" style="padding: 0px;">
+					<div class="advance" style="bottom: -40px;">
+						<h5 style="font-weight: normal; font-size: 17px; cursor:pointer;">Advanced <i class="fa fa-plus" id="down" aria-hidden="true"></i> <i class="fa fa-plus" aria-hidden="true" id="up" style="display:none;"></i> </h5>
+					</div>
+					<div class="advance2" style="display:none; bottom: -40px;">
+						<h5 style="font-weight: normal; font-size: 17px;cursor:pointer;">Advanced <i class="fa fa-minus" aria-hidden="true" id="up"></i> </h5>
+					</div>
+					
+				</div>
+			
+			</div>
+		</section><!--/#services-->
+
+    
+	
+	
+	
+    <section id="contact-page" class="container" style="padding:0">
+        <div class="row">
+			<div class="col-sm-4 col-xs-8 text-right disply-none" style="margin: 0px;">
+				<?php 
+				/*	 $address = $_REQUEST['endPoint'];
+		if(!empty($address)){
+						//Formatted address
+						$formattedAddr = str_replace(' ','+',$address);
+						//Send request and receive json data by address
+						
+						$geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($formattedAddr).'&sensor=false');
+						$output = json_decode($geocodeFromAddr);						
+						//Get latitude and longitute from json data
+					 $data['latitude']  = $output->results[0]->geometry->location->lat; 
+					 $data['longitude'] = $output->results[0]->geometry->location->lng;
+						//Return latitude and longitude of the given address
+					}	*/			
+				?>
+				
+	<style>
+		.pading {
+  padding: 0 4px !important;
+}
+	  .ui-datepicker{
+			font-size:18px !important;
+		}
+		
+	.search-result-block-outer .jspVerticalBar .jspDrag{
+		background:rgba(0, 0, 0, 0.2);
+	}
+	.search-result-block-outer .jspVerticalBar .jspDrag {
+	  background: rgba(0, 0, 0, 0.2) none repeat scroll 0 0;
+	  border-radius: 9px;
+	  height: 10px;
+	  margin-top: 4px;
+	}
+	.search-result-block-outer .jspVerticalBar{
+		background:none;
+		
+	}
+	.search-result-block-outer .jspTrack{
+		background:none;
+		padding-left:3px;
+	}
+	.search-result-block-outer{
+		padding: 0 5px !important;
+	}
+	#map{
+		height:800px;
+	}
+	.pagination li > a:hover {
+  background: #e1e1e1 none repeat scroll 0 0 !important;
+}
+.result {
+  background: #f1f1f1 none repeat scroll 0 0;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  float: left;
+  margin-bottom: 15px;
+  padding: 15px 15px 0;
+  width: 100%;
+}
+.guidetour-select.highest button {
+  background: transparent none repeat scroll 0 0 !important;
+  border: medium none transparent;
+  margin-top: 5px;
+}
+.guidetour-select.highest button span {
+  color: #444444 !important;
+}
+.guidetour-select.highest .dropdown-toggle .caret {
+  margin-top: -2px;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  vertical-align: middle;
+  border-color: #444 transparent !important;
+}
+.map-aro{
+  background: #000 none repeat scroll 0 0;
+  border-radius: 4px;
+  color: #fff;
+  height: 42px;
+  padding: 14px 7px 0 2px;
+  position: absolute;
+  right: 3px;
+  top: 164px;
+}
+.arrow_click{
+  background: #000 none repeat scroll 0 0;
+  border-radius: 4px;
+  color: #fff;
+  height: 42px;
+  padding: 14px 7px 0 2px;
+  position: absolute;
+  left:0;
+  top: 164px;
+}
+.hidemap
+{
+	display:none;
+}
+.search-right
+{
+	width:100%;
+}
+.col-sm-12.result:hover {
+  border: 1px solid red;
+}
+.title_tour {
+  color: #444;
+}  
+  </style>
+
+
+    <!--i class="fa fa-caret-left map-aro" style="z-index:999;" id="arrow_click"aria-hidden="true"></i--><div id="map" style="border-right:2px solid #000;margin-left:-85px;"> </div>
+	
+    <script>
+
+      function initMap() {
+		  
+        var myLatLng = {lat: <?php echo empty($newlocations[0]->lat) ? '34.341575' : $newlocations[0]->lat;//$data['latitude']; ?>, lng: <?php echo empty($newlocations[0]->lng) ? '108.93977' : $newlocations[0]->lng;//$data['longitude']; ?>};
+		
+		
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: myLatLng
+        });
+		 var bounds = new google.maps.LatLngBounds();
+		 map.setTilt(45);
+
+
+		var markers = <?php echo json_encode($newlocations).';'; ?>
+		var infowindow = new google.maps.InfoWindow();
+		  jQuery(markers).each(function(index,glatlng){	 
+			var newLatlng = new google.maps.LatLng(glatlng.lat,glatlng.lng);
+			   bounds.extend(newLatlng);
+			  marker = new google.maps.Marker({
+			  position: newLatlng,
+			  map: map      
+			});	
+			
+			
+			
+			var contentString = '<div class="mouseover_text">Name:' + glatlng.title + '<br/> Price:' + glatlng.price + '</div>';
+			
+		 
+		
+			 marker.addListener('click', function() {
+				window.location = '<?php echo site_url();?>/detail/'+ glatlng.link +'/'+ glatlng.id;
+				});
+				
+			
+
+			google.maps.event.addListener(marker,'mouseover', (function(marker,contentString,infowindow){
+					
+					return function() {
+					   infowindow.close();
+					   infowindow.setContent(contentString);
+					   infowindow.open(map,marker);
+					};
+				})(marker,contentString,infowindow)); 
+				
+			
+
+
+
+		  });
+		  map.fitBounds(bounds); 
+		    var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+				this.setZoom(2);
+				google.maps.event.removeListener(boundsListener);
+			});
+		  google.maps.event.addDomListener(window, "resize", function() {
+			  //console.log(123);
+		   var center = map.getCenter();
+		   google.maps.event.trigger(map, "resize");
+		   map.setCenter(center); 
+		});
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjrdzheqwZmdr8HFIzg5hN42TKRSTsE-g&callback=initMap"
+    async defer></script>			
+				
+			<!--img src="<?php bloginfo( 'template_url' ); ?>/img/map.png"-->
+            </div>
+			<script>
+			
+			$('#arrow_click').click(function(){
+			$('#map').toggleClass('hidemap');	
+			 if($('#arrow_click').hasClass('map-aro'))
+			{
+				$('#arrow_click').addClass('arrow_click');
+				$('#arrow_click').removeClass('map-aro');
+				$('#search-rightdiv').addClass('search-right');
+				
+			}
+			 else
+			{
+				
+				$('#arrow_click').addClass('map-aro');
+				$('#arrow_click').removeClass('arrow_click');
+				$('#search-rightdiv').removeClass('search-right');
+			}		  
+			});
+			
+			
+			</script>
+            <div class="col-sm-8" id="search-rightdiv" style="margin-top: 35px;">
+				<div class="col-sm-3 col-xs-6" style="padding:0 7px;">
+					<h3 style="border-right:1px solid #34495E;">Found <b><?php echo empty($i) ? '0' : $i; ?></b> tours</h3>
+				</div>
+				
+				
+				<div class="col-sm-6 col-xs-6" style="padding:0px;">
+				<?php
+				if(!empty($search)) { ?>
+					<h5 style="padding: 21px 0px 0;"><span class="counter-page-block">Showing 1 - <?php if($i<10) {echo $i;} else { echo "10";}  ?></span>[Out of <?php echo $i; ?>]</h5>
+				<?php } ?>
+				</div>
+				
+				
+				<div class="col-sm-3 text-right">
+					<!--h5 style="padding: 10px;">Sort by <i class="fa fa-sort-desc" aria-hidden="true"></i></h5-->
+					<?php 
+						$sortByTable = array('' => 'Sort by', 'ratingSum-desc' => 'Highest Rated', 'price-desc' => 'Price High to Low', 'price-asc' => 'Price Low to High'); 
+						
+					?>
+					
+					<select name="sortby_tmp" id="sortby_tmp" class="guidetour-select selectpicker highest">
+					
+						<?php foreach($sortByTable as $key => $item): ?>
+							<option <?php echo ($key == $selectedSort) ? 'selected="selected"' : '';?> value="<?php echo $key;?>"><?php echo ucfirst($item); ?></option>
+						<?php endforeach; ?>
+						
+					</select>
+					
+					<script>
+					(function( $ ) {
+						$(function() {
+							$('#sortby_tmp').on('change', function(){
+								var cval = $(this).find("option:selected").val();								
+								$("#sortby").val(cval);
+								$('#searchform').submit();
+								  });
+							  });
+					})(jQuery);
+					</script>
+				</div>
+				<?php
+				if (empty($searchCollection))
+				{ ?>	
+					<div class="noresult_text"><p>Unfortunately we could not find any tours for the selected search. Please try again with different search parameters</p></div>
+				<?php } ?>
+				
+				
+				<style>
+					.search-result-block{
+						display:none;
+					}
+					.search-result-block.active{
+						display:block;
+					}
+					#pagination-search{
+						background:rgba(0, 0, 0, 0.6) none repeat scroll 0 0;
+					}
+					.search-result-block-outer{
+						overflow-y:scroll;
+						height:450px;
+						float:left;
+					}
+				</style>
+				<!--ul id="pagination-search" class="pagination-sm"></ul-->
+				<div class="">
+<?php 
+$v = 1;
+if(!empty($searchCollection))
+{
+			foreach($searchCollection as $search):
+			$activeBlock = ($v == 1) ? ' active' : '';
+			$symbolTable = array('USD' => '$', 'GBP' => '£', 'EUR' => '€');
+			?>
+			
+			<div class="outerdiv search-result-block block-<?php echo $v++.$activeBlock; ?>">
+			<?php 
+				foreach($search as $srch):
+			
+	
+?>				
+				<div class="col-sm-12 result">
+					<div class="col-sm-3" style="padding:0 10px;">
+					<?php if(empty($srch->images[0])): ?>
+						<a href="<?php echo site_url();?>/detail/<?php echo $srch->tour->name; ?>/<?php echo $srch->tour->id; ?>"><img style="width:100%;" src="<?php bloginfo( 'template_url' ); ?>/img/img1.png"></a>
+					<?php else: ?>
+						<img style="width:140px;height:100px;" src="<?php echo $srch->images[0]; ?>">
+					<?php endif; ?>	
+					</div>
+					<div class="col-sm-7" style="float: left;">
+						<a  class="title_tour" href="<?php echo site_url();?>/detail/<?php echo $srch->tour->name; ?>/<?php echo $srch->tour->id ?>"><h4 style="margin-top: 0px; text-transform: uppercase;"><strong><?php echo $srch->tour->title; ?></strong></h4></a>
+						<h5 style="margin-bottom: 0px;"><b>Destination</b></h5>
+				<h5 style="margin-top: 0px; margin-bottom: 0px;"><?php echo $srch->tour->endPoint ?></h5>
+						
+						<div class="col-sm-3" style="padding: 0px;">
+							<h5 style="margin-bottom: 0px;"><b>Date</b></h5>
+							<h5 style="margin-top: 0px;"><?php echo $srch->sap[0]->time ?></h5>
+						</div>
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h5 style="margin-bottom: 0px;"><b>Ride Type</b></h5>
+<div style="margin-top: 2px; font-size: 11px;"><?php $tourtype= str_replace('_',' ',$srch->tour->tourType); $tourtype= ucwords(strtolower($tourtype)); echo $tourtype;?></div>
+						</div>
+						<div class="col-sm-3" style="padding: 0px 6px;">
+							<h5 style="margin-bottom: 0px;"><b>Duration</b></h5>
+							<h5 style="margin-top: 0px;"><?php echo $srch->tour->days; ?>days</h5>
+						</div>
+						<div class="col-sm-2" style="padding: 0px 6px;">
+							<h5 style="margin-bottom: 0px;"><b>Rating</b></h5>
+							<h5 style="margin-top: 0px;">
+								<!--?php
+								$rate = $srch->tour->ratedPeople;
+								if($rate == 0)
+								{
+								echo "";
+								}
+								else
+								{
+								for($i=1; $i<=$rate; $i++)
+								{
+								echo"*";
+								}
+								}
+								?-->
+								<?php
+								
+								$rate = $srch->tour->ratedPeople;
+								$rateSum = $srch->tour->ratingSum;
+								if(!empty($rate) && !empty($rateSum)){
+									$rating = $rateSum/$rate;
+									echo number_format($rating,2,'.','');
+								}
+								
+								?>
+							</h5>
+						</div>
+					</div>
+					<div class="col-sm-2 text-center" style="float: right;">
+				<a href="<?php echo site_url();?>/detail/<?php echo $srch->tour->name; ?>/<?php echo $srch->tour->id ?>"><h3 style="margin: 0px; color: rgb(255, 77, 77);font-weight:500;"><?php $rideprice = $srch->tour->price; echo  $symbolTable[$srch->tour->currency].''.round($rideprice); ?></h3></a>
+						<h5 style="margin: 0px;">per ride</h5><br/>
+<a href="<?php echo site_url();?>/detail/<?php echo $srch->tour->name; ?>/<?php echo $srch->tour->id ?>"><button style="background: rgb(50, 116, 151) none repeat scroll 0% 0%;font-size:16px;padding:9px 16px;" type="submit" class="btn btn-primary btn-lg">Book it</button></a>
+					</div>
+                
+				</div>
+				
+					<?php 
+				/* 		if($v == 10)
+						{
+							break;
+						} */
+						endforeach;
+						?>
+						</div>
+						<?php 
+						endforeach;
+ 					} ?>
+					
+				</div>
+				
+				<div class="col-lg-12 text-center" style="padding:20px 0; float:left;">
+					
+				</div>
+				<div class="container text-center">
+				<div class="col-lg-3">
+				
+				</div>
+				
+				<div class="col-lg-6">
+					<ul id="pagination-search" class=""></ul>
+				</div>
+				 
+				<div class="col-lg-3">
+				 
+				</div>
+				 </div>
+				 <style>
+				 #pagination-search .first, #pagination-search .last{
+					 display:none;
+				 }
+				 #pagination-search li{
+					border: 1px solid #787878;
+					background:none;
+					border-radius: 5px;
+					color: #787878;
+					margin-right:1px;
+					float:left;
+				 }
+				 #pagination-search, #pagination-search li a, #pagination-search li:hover a, #pagination-search .active{
+					 background:none;
+					 color: #787878
+				 }
+				 </style>
+				 <script>
+				 (function( $ ) {
+				 $('#pagination-search').twbsPagination({
+					totalPages: <?php echo ceil($totalTours/10); ?>,
+					visiblePages: 5,
+					prev: '<i class="fa fa-arrow-left"></i>',
+					next: '<i class="fa fa-arrow-right"></i>',
+					onPageClick: function (event, page) {
+						var selBlock = 'block-'+page;
+						var offsetVal = 10;
+						var totalResults = <?php echo $totalTours; ?>;
+						var resultEnds = parseInt(page) * offsetVal;
+						var resultStarts = parseInt(resultEnds) - offsetVal;
+						resultStarts = (resultStarts < 1) ? 1 : resultStarts;
+						resultEnds = (resultEnds > totalResults) ? totalResults : resultEnds;
+						var counterblockdata = 'Showing '+resultStarts+' - '+resultEnds;
+						$('.search-result-block').removeClass('active');
+						$('.search-result-block.'+selBlock).addClass('active');
+						$('.counter-page-block').html(counterblockdata);
+						$("html, body").animate({ scrollTop: 0 }, "slow");
+					}
+				});
+				 })(jQuery);
+				</script>
+				<div class="col-lg-12 text-center" style=" float:left;">
+					<img src="<?php bloginfo( 'template_url' ); ?>/img/add-2.png">
+				</div>
+            </div><!--/.col-sm-8-->
+			
+            <!--/.col-sm-4-->
+        </div>
+    </section><!--/#contact-page-->
+
+
+	</div>
+</div>
+<?php get_footer(); ?>

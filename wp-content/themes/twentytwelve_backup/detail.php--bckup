@@ -1,0 +1,165 @@
+<?php
+/**
+ * Template Name: DETAIL
+ * The template for displaying all pages
+ *
+ * This is the template that displays all pages by default.
+ * Please note that this is the WordPress construct of pages
+ * and that other 'pages' on your WordPress site will use a
+ * different template.
+ *
+ * @package WordPress
+ * @subpackage Twenty_Twelve
+ * @since Twenty Twelve 1.0
+ */
+
+get_header(); ?>
+<div id="primary" class="site-content">
+	<div id="content" role="main">
+<?php
+	
+require_once get_template_directory().'/inc/tourlib.php';
+$tourObj = new tourLibrary();
+$detail = $tourObj->tour_detail();
+//$detail = $detail->tours;
+print_r($detail);
+?>
+		  <section id="contact-page" class="container">
+        <div class="row">
+            <div class="col-sm-8">
+				<div class="col-lg-10">
+					<img src="<?php bloginfo( 'template_url' ); ?>/img/banner4.png">
+				</div>
+				<div class="col-lg-2">
+					<div style="float: left; padding-bottom: 5px;">
+						<img src="<?php bloginfo( 'template_url' ); ?>/img/img-bnr.png">
+					</div>
+					<div style="float: left; padding-bottom: 5px;">
+						<img src="<?php bloginfo( 'template_url' ); ?>/img/img-bnr1.png">
+					</div>
+					<div style="float: left; padding-bottom: 5px;">
+						<img src="<?php bloginfo( 'template_url' ); ?>/img/img-bnr2.png">
+					</div>
+					<div style="float: left; padding-bottom: 5px;">
+						<img src="<?php bloginfo( 'template_url' ); ?>/img/img-bnr3.png">
+					</div>
+				</div>
+				
+				
+				<div class="col-sm-12" style="float: left; padding: 20px 0;">
+					
+					<div class="col-sm-8">
+						
+						
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h4 style="margin-bottom: 0px;"><strong>Date</strong></h4>
+							<h5 style="margin-top: 0px;"><?php echo $detail->sap[0]->time; ?></h5>
+						</div>
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h4 style="margin-bottom: 0px;"><strong>Ride Type</strong></h4>
+							<h5 style="margin-top: 0px;"><?php echo $detail->tour->tourType; ?></h5>
+						</div>
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h4 style="margin-bottom: 0px;"><strong>Duration</strong></h4>
+							<h5 style="margin-top: 0px;"><?php echo $detail->tour->days; ?>days</h5>
+						</div>
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h4 style="margin: 0px;"><strong>Rating</strong></h4>
+							<h5 style="margin-top: 0px;"><?php echo $detail->tour->ratedPeople; ?></h5>
+						</div>
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h4 style="margin: 0px;"><strong>Destination</strong></h4>
+							<h5 style="margin-top: 0px; margin-bottom: 0px;"><?php echo $detail->tour->endPoint; ?></h5>
+						</div>
+					</div>
+					<div class="col-sm-4 text-right">
+						<div class="col-sm-5 text-right">
+				<h4 style="margin: 0px; color: rgb(255, 77, 77);">$<?php echo $detail->sap[0]->price; ?></h1>
+							<h5 style="margin: 0px;">per ride</h5>
+						</div>
+						<div class="col-sm-7 text-right">
+							<button type="submit" class="btn btn-primary btn-lg">SELECT<br/>RIDE</button>
+						</div>
+					</div>
+                
+				</div>
+				
+				<div class="col-sm-12" style="float: left; padding: 20px 0;">
+					<h4 style="margin: 0px;"><strong>Ridge Trail</strong></h4>
+					<p>L<?php echo $detail->tour->description; ?></p>
+				</div>
+				
+				
+            </div><!--/.col-sm-8-->
+            <div class="col-sm-4">
+				<div class="col-sm-12" style="background: rgb(241, 241, 241) none repeat scroll 0% 0%; border-radius: 5px; padding: 0; padding: 9px 0;">
+					<h4 style="padding-left: 15px;">TOP RIDES IN THE REGION</h4>
+					
+					<div class="col-lg-12" style="margin-bottom: 10px;">
+						<img src="<?php bloginfo( 'template_url' ); ?>/img/side-bar.png" style="width:100%;">
+						<div class="side-bar">
+							<div class="col-lg-12 text-right">
+								<img src="<?php bloginfo( 'template_url' ); ?>/img/icon.png">
+								<h5>4.2</h5>
+							</div>
+							<div class="col-lg-6" style="padding-top: 15px;">
+								<h5 style="margin-bottom: 0px;"><strong>RIDGE TRAIL 1</strong></h5>
+								<h5 style="margin-top: 0px;">San Francisco, CA</h5>
+							</div>
+							<div class="col-lg-6 text-right" style="padding-top: 15px;">
+								<button type="submit" class="btn btn-primary btn-lg" style="background: rgb(100, 100, 100) none repeat scroll 0% 0%; border: 0px none; padding: 9px;">VIEW</button>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-lg-12" style="margin-bottom: 10px;">
+						<img src="<?php bloginfo( 'template_url' ); ?>/img/side-bar.png" style="width:100%;">
+						<div class="side-bar">
+							<div class="col-lg-12 text-right">
+								<img src="<?php bloginfo( 'template_url' ); ?>/img/icon.png">
+								<h5>4.2</h5>
+							</div>
+							<div class="col-lg-6" style="padding-top: 15px;">
+								<h5 style="margin-bottom: 0px;"><strong>RIDGE TRAIL 1</strong></h5>
+								<h5 style="margin-top: 0px;">San Francisco, CA</h5>
+							</div>
+							<div class="col-lg-6 text-right" style="padding-top: 15px;">
+								<button type="submit" class="btn btn-primary btn-lg" style="background: rgb(100, 100, 100) none repeat scroll 0% 0%; border: 0px none; padding: 9px;">VIEW</button>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-lg-12" style="margin-bottom: 10px;">
+						<img src="<?php bloginfo( 'template_url' ); ?>/img/side-bar.png" style="width:100%;">
+						<div class="side-bar">
+							<div class="col-lg-12 text-right">
+								<img src="<?php bloginfo( 'template_url' ); ?>/img/icon.png">
+								<h5>4.2</h5>
+							</div>
+							<div class="col-lg-6" style="padding-top: 15px;">
+								<h5 style="margin-bottom: 0px;"><strong>RIDGE TRAIL 1</strong></h5>
+								<h5 style="margin-top: 0px;">San Francisco, CA</h5>
+							</div>
+							<div class="col-lg-6 text-right" style="padding-top: 15px;">
+								<button type="submit" class="btn btn-primary btn-lg" style="background: rgb(100, 100, 100) none repeat scroll 0% 0%; border: 0px none; padding: 9px;">VIEW</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12 text-right">
+						<a href="#"><h4 style="color:#34495E;">VIEW ALL RIDES >></h4></a>
+					</div>
+				</div>
+				
+				<img src ="<?php bloginfo( 'template_url' ); ?>/img/add3.png" style="width: 100%; padding-top: 20px;">
+				
+            </div>
+			
+			<!--/.col-sm-4-->
+        </div>
+    </section><!--/#contact-page-->
+
+
+	</div>
+</div>
+
+<?php get_footer(); ?>

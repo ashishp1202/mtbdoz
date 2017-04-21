@@ -1,0 +1,356 @@
+<?php
+/**
+ * Template Name: SEARCH
+ * The template for displaying all pages
+ *
+ * This is the template that displays all pages by default.
+ * Please note that this is the WordPress construct of pages
+ * and that other 'pages' on your WordPress site will use a
+ * different template.
+ *
+ * @package WordPress
+ * @subpackage Twenty_Twelve
+ * @since Twenty Twelve 1.0
+ */
+
+get_header(); ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $(".advance").click(function(){
+        $(".testab").show();
+		 $('.advance2').show();
+    	$('.advance').hide();
+    });
+});
+</script>
+<script>
+$(document).ready(function(){
+    $(".advance2").click(function(){
+		$(".testab").hide();
+        $('.advance').show();
+    	$('.advance2').hide();
+    });
+});
+</script>
+<div id="primary" class="site-content">
+	<div id="content" role="main">
+<?php
+	
+require_once get_template_directory().'/inc/tourlib.php';
+$tourObj = new tourLibrary();
+$search = $tourObj->searchtest();
+$search = $search->tours;
+
+	$i = 0;
+foreach ($search as $item) {
+    $i++;
+    // if there are 15 $item[number] in this foreach, I want get the value : 15
+}	
+
+?>
+
+		
+		
+
+		  <section id="services" class="emerald banner-section" style="position: unset; padding: 30px 0px;">
+ <div class="container">
+           <form  method="get" action="<?php echo site_url();?>/search">
+			<div class="row">
+				<h3>SELECT YOUR RIDE </h3>
+				<div class="col-md-2 col-sm-12 background-color">
+                   
+					<div class="media">
+                        <div class="pull-left">
+               <img src ="<?php bloginfo( 'template_url' ); ?>/img/icon3.png">
+                        </div>
+					
+                        <div class="media-body">
+                    <input type="text" name="date" class="banr-input select-btn" value="<?php echo(strftime("%B %Y")); ?>"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-12 background-color">
+                    <div class="media">
+                        <div class="pull-left">
+               <img src ="<?php bloginfo( 'template_url' ); ?>/img/icon2.png">
+                        </div>
+                        <div class="media-body">
+                            <input type="text" name="endPoint" class="banr-input select-btn" placeholder="Destination"/>
+                        </div>
+                    </div>
+                </div><!--/.col-md-4-->
+                <div class="col-md-3 col-sm-12 background-color">
+                    <div class="media">
+                        <div class="pull-left" style="padding:1px;">
+               <img src ="<?php bloginfo( 'template_url' ); ?>/img/icon1.png">
+                        </div>
+                        <div class="media-body">
+                            <!-- <input class="banr-input" placeholder="Destination"/> -->
+							
+								<select class="select-btn" name="tourType" required>
+									<option>Ride type</option>
+								
+									<option>ALL MOUNTAIN</option>
+								
+								</select>
+								
+						
+                        </div>
+                    </div>
+                </div><!--/.col-md-4-->
+				<div class="col-md-1 col-sm-12" style="padding:9px;">
+					<!--button class="btn btn-danger" type="button" style="background: rgb(77, 194, 255) none repeat scroll 0% 0%; border: medium none rgb(77, 194, 255);">GO</button-->
+					<input type="submit" name="submit" value="GO" class="btn btn-danger" style="background: rgb(77, 194, 255) none repeat scroll 0% 0%; border: medium none rgb(77, 194, 255); padding: 7px; font-size: 23px;">
+					
+				</div>
+				<div class="col-md-1 col-sm-12" style="padding: 9px 0px;">
+					<div class="advance">
+						<h5>Advanced <i class="fa fa-angle-down" id="down" aria-hidden="true"></i> <i class="fa fa-angle-up" aria-hidden="true" id="up" style="display:none;"></i> </h5>
+					</div>
+					<div class="advance2" style="display:none;">
+						<h5>Advanced <i class="fa fa-angle-up" aria-hidden="true" id="up"></i> </h5>
+					</div>
+					
+				
+				</div>
+				
+            </div>
+			<div class="row testab" style="display:none">
+			
+				<div class="col-md-2 col-sm-12 background-color">
+                    <div class="media">
+                        
+                        <div class="media-body">
+                            <!-- <input class="banr-input" placeholder="Destination"/> -->
+							
+								<select class="select-btn" name="group" required> 
+									<option> Group Size</option>
+									<option>Any</option>
+									<option>Min value is 1</option>
+									<option> Max value is 99</option>
+								</select>
+								
+								
+							
+                        </div>
+                    </div>
+                </div>
+				
+				<div class="col-md-2 col-sm-12 background-color">
+                    <div class="media">
+                        
+                        <div class="media-body">
+                            <!-- <input class="banr-input" placeholder="Destination"/> -->
+							
+								<select class="select-btn" name="guidedTour" required> 
+									<option> Guided </option>
+									<option> Any</option>
+									<option>Guided</option>
+									<option> Self-guided</option>
+								</select>
+								
+							
+                        </div>
+                    </div>
+                </div>
+				
+				<div class="col-md-2 col-sm-12 background-color">
+                    <div class="media">
+                        
+                        <div class="media-body">
+                            <!-- <input class="banr-input" placeholder="Destination"/> -->
+							<select class="select-btn" name="days" required> 
+									<option> Duration </option>
+									<option> Any</option>
+									<option>Single day</option>
+									<option>1-7 days</option>
+									<option>8 days and above</option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+				
+				<div class="col-md-2 col-sm-12 background-color">
+                    <div class="media">
+                        
+                        <div class="media-body">
+                            <!-- <input class="banr-input" placeholder="Destination"/> -->
+							<select class="select-btn" name="difficultyLevel" required> 
+									<option>Difficulty level</option>
+									<option>Any</option>
+									<option>Easy</option>
+									<option>Medium</option>
+									<option>Difficult</option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+				
+				<div class="col-md-2 col-sm-12 background-color">
+                    <div class="media">
+                       
+                        <div class="media-body">
+                            <!-- <input class="banr-input" placeholder="Destination"/> -->
+							<select class="select-btn" name="hiredBikes" required> 
+									<option> Hired bike </option>
+									<option>Any</option>
+									<option>Hired</option>
+									<option>Own</option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+				
+				
+			
+			</div>
+			   	</form>
+			
+        </div>
+    </section><!--/#services-->
+
+    
+	
+	
+	
+    <section id="contact-page" class="container" style="padding:0">
+        <div class="row">
+			<div class="col-sm-4 text-right" style="margin: 0px;">
+				<?php 
+					 $address = $_REQUEST['endPoint'];
+		if(!empty($address)){
+						//Formatted address
+						$formattedAddr = str_replace(' ','+',$address);
+						//Send request and receive json data by address
+						$geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$formattedAddr.'&sensor=false'); 
+						$output = json_decode($geocodeFromAddr);
+						//Get latitude and longitute from json data
+					 $data['latitude']  = $output->results[0]->geometry->location->lat; 
+					 $data['longitude'] = $output->results[0]->geometry->location->lng;
+						//Return latitude and longitude of the given address
+					}				
+				?>
+				
+	<style>
+      #map 
+	  {
+        height: 600px;
+      }
+    </style>
+
+
+    <div id="map"></div>
+    <script>
+
+      function initMap() {
+        var myLatLng = {lat: <?php echo $data['latitude']; ?>, lng: <?php echo $data['longitude']; ?>};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: myLatLng
+        });
+
+        var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: 'Hello World!'
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjrdzheqwZmdr8HFIzg5hN42TKRSTsE-g&callback=initMap"
+    async defer></script>			
+				
+			<!--img src="<?php bloginfo( 'template_url' ); ?>/img/map.png"-->
+            </div>
+            <div class="col-sm-8">
+				<div class="col-sm-4" style="padding:0 10px;">
+					<h3 style="border-right:1px solid #34495E;">Found 10 tours</h3>
+				</div>
+				<div class="col-sm-5">
+					<h5 style="padding: 10px;">Showing 1 - <?php if($i<10) {echo $i;} else { echo "10";}  ?>[Out of <?php echo $i; ?>]</h5>
+				</div>
+				<div class="col-sm-3 text-right">
+					<h5 style="padding: 10px;">Sort by <i class="fa fa-sort-desc" aria-hidden="true"></i></h5>
+				</div>
+				
+				
+<?php 
+$v = 0;
+	foreach($search as $srch):
+$v++;
+	
+?>				
+				<div class="col-sm-12 result">
+					<div class="col-sm-3" style="padding:0 10px;">
+						<img src="<?php bloginfo( 'template_url' ); ?>/img/img1.png">
+					</div>
+					<div class="col-sm-6">
+						<h4 style="margin-top: 0px;"><strong><?php echo $srch->tour->tourType ?></strong></h4>
+						<h5 style="margin-bottom: 0px;">Destination</h5>
+				<h5 style="margin-top: 0px; margin-bottom: 0px;"><?php echo $srch->tour->endPoint ?></h5>
+						
+						<div class="col-sm-3" style="padding: 0px 6px;">
+							<h5 style="margin-bottom: 0px;">Date</h5>
+							<h5 style="margin-top: 0px;"><?php echo $srch->sap[0]->time ?></h5>
+						</div>
+						<div class="col-sm-4" style="padding: 0px 6px;">
+							<h5 style="margin-bottom: 0px;">Ride Type</h5>
+<div style="font-weight: bold; margin-top: 2px; font-size: 11px;"><?php echo $srch->tour->tourType ?></div>
+						</div>
+						<div class="col-sm-3" style="padding: 0px 6px;">
+							<h5 style="margin-bottom: 0px;">Duration</h5>
+							<h5 style="margin-top: 0px;"><?php echo $srch->tour->days; ?>days</h5>
+						</div>
+						<div class="col-sm-2" style="padding: 0px 6px;">
+							<h5 style="margin-bottom: 0px;">Rating</h5>
+							<h5 style="margin-top: 0px;">
+								<?php
+								$rate = $srch->tour->ratedPeople;
+								if($rate == 0)
+								{
+								echo "NO RATING";
+								}
+								else
+								{
+								for($i=1; $i<=$rate; $i++)
+								{
+								echo"*";
+								}
+								}
+								?>
+							</h5>
+						</div>
+					</div>
+					<div class="col-sm-3 text-right">
+				<h1 style="margin: 0px; color: rgb(255, 77, 77);">$<?php echo $srch->sap[0]->price ?></h1>
+						<h5 style="margin: 0px;">per ride</h5>
+<a href="<?php echo site_url();?>/detail?id=<?php echo $srch->tour->id ?>"><button type="submit" class="btn btn-primary btn-lg">SELECT RIDE</button></a>
+					</div>
+                
+				</div>
+				
+					<?php 
+						if($v == 10)
+						{
+							break;
+						}
+						endforeach;
+ 					?>				
+				
+				
+				<div class="col-lg-12 text-center" style="padding:20px 0; float:left;">
+					
+				</div>
+				<div class="col-lg-12 text-center" style=" float:left;">
+					<img src="<?php bloginfo( 'template_url' ); ?>/img/add-2.png">
+				</div>
+            </div><!--/.col-sm-8-->
+            <!--/.col-sm-4-->
+        </div>
+    </section><!--/#contact-page-->
+
+
+	</div>
+</div>
+<?php get_footer(); ?>

@@ -1,0 +1,319 @@
+<?php class Calendar {
+
+
+public function __construct($curl, $cMonthData){
+	$this->naviHref = htmlentities($curl);
+	$this->monthData = $cMonthData;
+
+	$curMonth = $this->monthData->data->tours;
+	$userdata = $_SESSION['rideTourUserData'];
+	$operatorId = $userdata->detail->id;	
+	$currentTourId = $_SESSION['setUserTourId'];
+	$sapMonthData = array();
+	if(!empty($curMonth)){
+		foreach($curMonth as $item){
+			$sapCol = $item->sap;
+			if(!empty($sapCol)){
+				foreach($sapCol as $sap){
+					$sapKey = date('j',strtotime($sap->time));
+					$tourId = $item->tour->id;
+					
+					if($currentTourId == $tourId){						
+						if($operatorId == $item->tour->operatorId ){
+							
+							$sapMonthData[$sapKey][] = array('price' => $sap->price, 'time' => $sap->time, 'id' => $sap->id, 'tourId' => $tourId );
+						}
+					}
+				}
+			}
+		}
+			
+	}
+	
+	$this->sapMonthData = $sapMonthData;
+}
+
+/********************* PROPERTY ********************/
+private $dayLabels = array("M","T","W","T","F","S","S");
+
+private $currentYear=0;
+
+private $currentMonth=0;
+
+private $currentDay=0;
+
+private $currentDate=null;
+
+private $daysInMonth=0;
+
+private $naviHref= null;
+
+private $monthData= null;
+private $sapMonthData= array();
+
+/********************* PUBLIC **********************/
+
+/**
+ * print out the calendar
+ */
+public function show() {
+     $year == null;
+
+     $month == null;
+
+    if(null==$year&&isset($_GET['y'])){
+
+        $year = $_GET['y'];
+
+    }else if(null==$year){
+
+        $year = date("Y",time());
+
+    }
+
+    if(null==$month&&isset($_GET['month'])){
+
+        $month = $_GET['month'];
+
+    }else if(null==$month){
+
+        $month = date("m",time());
+
+    }
+
+    $this->currentYear=$year;
+
+    $this->currentMonth=$month;
+
+    $this->daysInMonth=$this->_daysInMonth($month,$year);
+
+    $content='<div id="calendar">'.
+        '<div class="box">'.
+		'<ul class="label-calendar">'.$this->_createLabels().'</ul>'.
+        $this->_createNavi().
+        '</div>'.
+        '<div class="box-content">';
+        
+    $content.='<div class="clear"></div>';
+    $content.='<ul class="dates">';
+	
+
+
+    $weeksInMonth = $this->_weeksInMonth($month,$year);
+    // Create weeks in a month
+    for( $i=0; $i<$weeksInMonth; $i++ ){
+
+        //Create days in a week
+        for($j=1;$j<=7;$j++){
+            $content.=$this->_showDay($i*7+$j);
+        }
+    }
+
+    $content.='</ul>';
+
+    $content.='<div class="clear"></div>';
+
+    $content.='</div>';
+
+    $content.='</div>';
+    return $content;
+}
+
+/********************* PRIVATE **********************/
+/**
+ * create the li element for ul
+ */
+private function _showDay($cellNumber){
+
+    if($this->currentDay==0){
+
+        $firstDayOfTheWeek = date('N',strtotime($this->currentYear.'-'.$this->currentMonth.'-01'));
+
+        if(intval($cellNumber) == intval($firstDayOfTheWeek)){
+
+            $this->currentDay=1;
+
+        }
+    }
+
+    if( ($this->currentDay!=0)&&($this->currentDay<=$this->daysInMonth) ){
+
+        $this->currentDate = date('Y-m-d',strtotime($this->currentYear.'-'.$this->currentMonth.'-'.($this->currentDay)));
+
+        $cellContent = $this->currentDay;
+
+        $this->currentDay++;
+
+    }else{
+
+        $this->currentDate =null;
+
+        $cellContent=null;
+    }
+	
+
+	
+	
+	
+	$randomNum = null;
+	$dataNum = null;
+	$dataPrice = null;
+	if(!empty($cellContent)){
+		
+		$randomNum = $this->sapMonthData[$cellContent];		
+		$dataNum = null;
+		$dataPrice = null;
+	}
+	
+	
+	$boxHtml = '';
+	if(!empty($randomNum)){
+		foreach($randomNum as $sap){
+		$dataNum = '';
+		$dataPrice = $sap['price'];
+		$sapId = $sap['id'];
+		$tourId = $sap['tourId'];
+		$boxHtml .= '<div  class="box box-inner text-center calendar-select calc-active" data-price="'.$dataPrice.'" data-link-price="price-'.$sapId.'" data-number="'.$dataNum.'" data-link-num="num-'.$sapId.'">
+			<div class="box1" style="background: rgb(234, 254, 192) none repeat scroll 0% 0%;">
+				<h6 class="price-'.$sapId.' all-price" >'.number_format($dataPrice,2,'.','').'</h6>
+				<input type="hidden" class="val-price-'.$sapId.' all-price-val" name="saps[old]['.$cellContent.']['.$tourId.'][price]" value="'.$dataPrice.'">
+				<input type="hidden" name="saps[oldtours][]" value="'.$tourId.'"/>
+				<input type="hidden" class="check-ele" name="checktours[old][]" data-cur-mnth="'.$cellContent.'" value="'.$cellContent.'" />
+			</div>
+			<div class="box1" style="background: #fff;">
+				<i class="fa newlink fa-check" aria-hidden="true"></i>
+			</div>
+		</div>';
+		}
+	}
+	$boxEmptyHtml = '<div  class="box box-inner text-center">
+		<div class="box1 no-border" >
+			<h5></h5>
+		</div>
+		<div class="box1 no-border" >
+			
+		</div>
+		<div class="box2 no-border" >
+			<h5></h5>
+		</div>
+		<div class="box2 no-border" >			
+		</div>
+	</div>';
+	$boxWithNewHtml = '<div  class="box box-inner text-center calendar-select" data-price="" data-link-price="new-price-'.$cellContent.'" data-number="" data-link-num="new-num-'.$cellContent.'">
+			<div class="box1" style="background: rgb(234, 254, 192) none repeat scroll 0% 0%;">
+				<h6 class="all-price" ></h6>
+				<input type="hidden" class="all-price-val" name="saps[new]['.$cellContent.'][price]" value="">
+				<input type="hidden" class="check-ele" name="checktours[new][]" data-cur-mnth="'.$cellContent.'" />
+			</div>
+			<div class="box1" style="background: #fff;">
+				<i class="fa newlink" aria-hidden="true"></i>
+			</div>
+		</div>';
+	$fillBox = $boxEmptyHtml;
+	$addActiveClass = '';
+
+	if($cellContent){
+		if(!empty($randomNum)){
+			$fillBox = $boxHtml;
+			
+		} else {
+			$fillBox = $boxWithNewHtml;
+		}
+	}
+	$dataNum = '';
+    $addDisable = '';
+    $olddate = $this->currentDate.' 00:00:00';
+    if((time()-(60*60*24)) > strtotime($olddate)){
+        $addDisable = ' disable-block';
+    }
+
+
+    return '<li id="li-'.$this->currentDate.'" class="'.($cellNumber%7==1?' start ':($cellNumber%7==0?' end ':' ')).
+    ($cellContent==null?'mask':'').$addDisable.'"><h4>'.$cellContent.'</h4>'.$fillBox.'</li>';
+}
+
+/**
+ * create navigation
+ */
+private function _createNavi(){
+
+    $nextMonth = $this->currentMonth==12?1:intval($this->currentMonth)+1;
+
+    $nextYear = $this->currentMonth==12?intval($this->currentYear)+1:$this->currentYear;
+
+    $preMonth = $this->currentMonth==1?12:intval($this->currentMonth)-1;
+
+    $preYear = $this->currentMonth==1?intval($this->currentYear)-1:$this->currentYear;
+
+    return
+        '<div class="header">'.
+        '<div class="col-lg-4 text-left"><a class="prev" href="'.$this->naviHref.'?month='.sprintf('%02d',$preMonth).'&y='.$preYear.'"><h4><i class="fa fa-angle-left"></i></h4></a></div>'.
+        '<div class="col-lg-4 text-center"><h4 class="title">'.strtoupper(date('M Y',strtotime($this->currentYear.'-'.$this->currentMonth.'-1'))).'</h4></div>'.
+        '<div class="col-lg-4 text-right"><a class="next" href="'.$this->naviHref.'?month='.sprintf("%02d", $nextMonth).'&y='.$nextYear.'"><h4><i class="fa fa-angle-right"></i></h4></a></div>'.
+        '</div>';
+}
+
+/**
+ * create calendar week labels
+ */
+private function _createLabels(){
+
+    $content='';
+
+    foreach($this->dayLabels as $index=>$label){
+
+        $content.='<li class="'.($label==6?'end title':'start title').' title">'.$label.'</li>';
+
+    }
+
+    return $content;
+}
+
+
+
+/**
+ * calculate number of weeks in a particular month
+ */
+private function _weeksInMonth($month=null,$year=null){
+
+    if( null==($year) ) {
+        $year =  date("Y",time());
+    }
+
+    if(null==($month)) {
+        $month = date("m",time());
+    }
+
+    // find number of days in this month
+    $daysInMonths = $this->_daysInMonth($month,$year);
+
+    $numOfweeks = ($daysInMonths%7==0?0:1) + intval($daysInMonths/7);
+
+    $monthEndingDay= date('N',strtotime($year.'-'.$month.'-'.$daysInMonths));
+
+    $monthStartDay = date('N',strtotime($year.'-'.$month.'-01'));
+
+    if($monthEndingDay<$monthStartDay){
+
+        $numOfweeks++;
+
+    }
+
+    return $numOfweeks;
+}
+
+/**
+ * calculate number of days in a particular month
+ */
+private function _daysInMonth($month=null,$year=null){
+
+    if(null==($year))
+        $year =  date("Y",time());
+
+    if(null==($month))
+        $month = date("m",time());
+
+    return date('t',strtotime($year.'-'.$month.'-01'));
+}
+}
+?>
